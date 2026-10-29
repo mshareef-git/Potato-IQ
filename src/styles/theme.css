@@ -1,0 +1,36 @@
+:root {
+  --paper: #F7F4EF;
+  --surface: #FFFFFF;
+  --ink: #111111;
+  --yellow: #FFD21F;
+  --purple: #8B5CF6;
+  --pink: #F43F97;
+  --green: #A3E635;
+  --red: #EF4444;
+  --blue: #6EC6FF;
+  --dark: #000000;
+  --border-color: #111111;
+  --shadow-color: #111111;
+  --card-bg: #FFFFFF;
+  --text-main: #111111;
+  --text-muted: #555555;
+  --dot-color: rgba(17, 17, 17, 0.08);
+}
+
+.dark {
+  --paper: #000000;
+  --surface: #121212;
+  --ink: #FFFFFF;
+  --yellow: #FFD21F;
+  --purple: #A78BFA;
+  --pink: #F43F97;
+  --green: #A3E635;
+  --red: #EF4444;
+  --blue: #6EC6FF;
+  --border-color: #FFFFFF;
+  --shadow-color: #FFFFFF;
+  --card-bg: #121212;
+  --text-main: #FFFFFF;
+  --text-muted: #AAAAAA;
+  --dot-color: rgba(255, 255, 255, 0.12);
+}
