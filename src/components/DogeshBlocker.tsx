@@ -28,7 +28,7 @@ export const DogeshBlocker: React.FC<DogeshBlockerProps> = ({
       title="Dogesh is blocking with his shield! (Click to push away)"
     >
       <div className="bg-[var(--purple)] text-white border-4 border-black p-3 rounded-2xl shadow-[6px_6px_0px_#000] flex items-center gap-3 max-w-sm">
-        <DogeshAvatar state="guard" size={85} allowPunch={true} />
+        <DogeshAvatar state="guard" size={110} allowPunch={true} />
         <div className="space-y-1 pr-1">
           <div className="flex items-center gap-1 text-[var(--yellow)] font-heading text-xs tracking-wide uppercase">
             <Shield className="w-3.5 h-3.5" />

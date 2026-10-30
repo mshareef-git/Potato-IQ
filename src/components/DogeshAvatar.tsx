@@ -25,7 +25,7 @@ const PUNCH_OFFENDED_COMMENTS = [
 
 export const DogeshAvatar: React.FC<DogeshAvatarProps> = ({
   state = 'idle',
-  size = 110,
+  size = 280,
   isSpeaking = false,
   onClick,
   onPunchReaction,
@@ -99,7 +99,7 @@ export const DogeshAvatar: React.FC<DogeshAvatarProps> = ({
       role="button"
       tabIndex={0}
       title={state === 'cry' ? "Dogesh is crying! How could you?!" : "Instructor Dogesh (Click to interact / poke)"}
-      className={`relative cursor-pointer select-none transition-transform duration-300 ease-out motion-reduce:transform-none pointer-events-auto ${
+      className={`relative cursor-pointer select-none transition-all duration-700 ease-out motion-reduce:transform-none pointer-events-auto ${
         isShaking
           ? 'animate-shake scale-110'
           : `${speakingTransform} hover:scale-105 active:scale-95`

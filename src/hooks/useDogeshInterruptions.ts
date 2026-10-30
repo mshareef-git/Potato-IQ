@@ -24,6 +24,20 @@ const PUNCH_OFFENDED_COMMENTS = [
   "MY PAWS! MY DIGNITY! TASTE MY PETTY REVENGE GIF!",
 ];
 
+// Double the previous base size (~280px-320px), with random variation from small to gigantic
+export function getRandomDogeshSize(isMobile: boolean): number {
+  const rand = Math.random();
+  if (isMobile) {
+    if (rand < 0.25) return Math.floor(Math.random() * 25) + 140; // 140 - 165 (small on mobile)
+    if (rand < 0.70) return Math.floor(Math.random() * 30) + 195; // 195 - 225 (double on mobile)
+    return Math.floor(Math.random() * 30) + 245;                  // 245 - 275 (giant on mobile)
+  } else {
+    if (rand < 0.25) return Math.floor(Math.random() * 35) + 185; // 185 - 220 (small)
+    if (rand < 0.70) return Math.floor(Math.random() * 45) + 285; // 285 - 330 (double standard)
+    return Math.floor(Math.random() * 50) + 380;                  // 380 - 430 (giant)
+  }
+}
+
 export function useDogeshInterruptions({ currentScreen, allowBlocker = true }: UseDogeshOptions) {
   const [dogeshState, setDogeshState] = useState<DogeshState>('idle');
   const [comment, setComment] = useState<string>(
@@ -33,12 +47,15 @@ export function useDogeshInterruptions({ currentScreen, allowBlocker = true }: U
   const [isBlocking, setIsBlocking] = useState<boolean>(false);
   const [floatingGifs, setFloatingGifs] = useState<FloatingGifInstance[]>([]);
 
+  const isInitialMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+  const initialBaseSize = isInitialMobile ? 200 : 290;
+
   // Safe Roaming coordinates and dynamic scale (modest size, never stretched)
   const [dogeshPos, setDogeshPos] = useState<{ x: number; y: number }>({
-    x: typeof window !== 'undefined' ? Math.max(20, window.innerWidth - 200) : 800,
-    y: typeof window !== 'undefined' ? Math.max(100, window.innerHeight - 250) : 500,
+    x: typeof window !== 'undefined' ? Math.max(20, window.innerWidth - (isInitialMobile ? 220 : 330)) : 800,
+    y: typeof window !== 'undefined' ? Math.max(90, window.innerHeight - (isInitialMobile ? 260 : 390)) : 400,
   });
-  const [dogeshSize, setDogeshSize] = useState<number>(155);
+  const [dogeshSize, setDogeshSize] = useState<number>(initialBaseSize);
 
   const screenStartTime = useRef<number>(Date.now());
   const movementTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -308,11 +325,13 @@ export function useDogeshInterruptions({ currentScreen, allowBlocker = true }: U
 
       // Retreat to safe viewport corner outside the game controls/mosaic
       if (typeof window !== 'undefined') {
+        const isMobile = window.innerWidth < 640;
+        const retreatSize = isMobile ? 140 : 185;
         const retreatToLeft = Math.random() < 0.5;
-        const cornerX = retreatToLeft ? 24 : Math.max(24, window.innerWidth - 180);
-        const cornerY = Math.max(80, window.innerHeight - 220);
+        const cornerX = retreatToLeft ? 24 : Math.max(24, window.innerWidth - retreatSize - 25);
+        const cornerY = Math.max(80, window.innerHeight - retreatSize - 100);
         setDogeshPos({ x: cornerX, y: cornerY });
-        setDogeshSize(115); // settle slightly smaller
+        setDogeshSize(retreatSize); // settle slightly smaller when hurt
       }
 
       // On CAPTCHA, punch has Priority 2 with auto-dismiss after 5s
@@ -323,7 +342,10 @@ export function useDogeshInterruptions({ currentScreen, allowBlocker = true }: U
         if (poseResetTimerRef.current) clearTimeout(poseResetTimerRef.current);
         poseResetTimerRef.current = setTimeout(() => {
           setDogeshState('idle');
-          setDogeshSize(155);
+          if (typeof window !== 'undefined') {
+            const isMobile = window.innerWidth < 640;
+            setDogeshSize(isMobile ? 200 : 290);
+          }
         }, 3000);
       }
 
@@ -334,7 +356,10 @@ export function useDogeshInterruptions({ currentScreen, allowBlocker = true }: U
 
       // Restore normal size after 3.5s
       setTimeout(() => {
-        setDogeshSize(155);
+        if (typeof window !== 'undefined') {
+          const isMobile = window.innerWidth < 640;
+          setDogeshSize(isMobile ? 200 : 290);
+        }
       }, 3500);
 
       // Cooldown reset after 2.0s
@@ -365,6 +390,44 @@ export function useDogeshInterruptions({ currentScreen, allowBlocker = true }: U
     };
   }, []);
 
+  // RANDOM SIZE MORPHING SCHEDULER:
+  // Randomly grows big and shrinks small dynamically throughout the whole game
+  useEffect(() => {
+    if (currentScreen === 'intro') return;
+
+    let sizeTimer: NodeJS.Timeout | null = null;
+
+    const scheduleNextSizeMorph = () => {
+      // Morph size every 4 to 8 seconds
+      const delay = Math.floor(Math.random() * 4500) + 4000;
+      sizeTimer = setTimeout(() => {
+        if (typeof window !== 'undefined') {
+          const isMobile = window.innerWidth < 640;
+          const nextSize = getRandomDogeshSize(isMobile);
+
+          setDogeshSize(nextSize);
+
+          // Keep within safe viewport boundaries if growing
+          setDogeshPos((prev) => {
+            const maxX = Math.max(20, window.innerWidth - nextSize - 20);
+            const maxY = Math.max(80, window.innerHeight - nextSize - 100);
+            return {
+              x: Math.min(prev.x, maxX),
+              y: Math.min(prev.y, maxY),
+            };
+          });
+        }
+        scheduleNextSizeMorph();
+      }, delay);
+    };
+
+    scheduleNextSizeMorph();
+
+    return () => {
+      if (sizeTimer) clearTimeout(sizeTimer);
+    };
+  }, [currentScreen]);
+
   // DOGESH ROAMING SCHEDULER:
   // Non-CAPTCHA screens roam and make occasional arrival comments.
   // On CAPTCHA screen, roaming is quiet (comments are handled by CAPTCHA scheduler).
@@ -388,22 +451,19 @@ export function useDogeshInterruptions({ currentScreen, allowBlocker = true }: U
 
         const screenW = window.innerWidth;
         const screenH = window.innerHeight;
+        const isMobile = screenW < 640;
+        const nextSize = getRandomDogeshSize(isMobile);
 
         const safeWaypoints = [
-          { x: Math.max(20, screenW - 200), y: Math.max(90, screenH - 240) }, // Bottom-right
-          { x: 25, y: Math.max(90, screenH - 240) },                         // Bottom-left
-          { x: Math.max(20, screenW - 200), y: 85 },                          // Top-right
-          { x: 25, y: 85 },                                                   // Top-left
-          { x: Math.max(20, screenW - 190), y: Math.floor(screenH / 2) - 80 },// Mid-right
-          { x: 25, y: Math.floor(screenH / 2) - 80 },                         // Mid-left
+          { x: Math.max(20, screenW - nextSize - 25), y: Math.max(90, screenH - nextSize - 120) }, // Bottom-right
+          { x: 25, y: Math.max(90, screenH - nextSize - 120) },                                    // Bottom-left
+          { x: Math.max(20, screenW - nextSize - 25), y: 85 },                                     // Top-right
+          { x: 25, y: 85 },                                                                        // Top-left
+          { x: Math.max(20, screenW - nextSize - 25), y: Math.floor(screenH / 2) - Math.floor(nextSize / 2) }, // Mid-right
+          { x: 25, y: Math.floor(screenH / 2) - Math.floor(nextSize / 2) },                        // Mid-left
         ];
 
         const target = safeWaypoints[Math.floor(Math.random() * safeWaypoints.length)];
-
-        const isMobile = screenW < 640;
-        const nextSize = isMobile
-          ? Math.floor(Math.random() * 30) + 100
-          : Math.floor(Math.random() * 50) + 140;
 
         setIsMoving(true);
         setDogeshState('walk');

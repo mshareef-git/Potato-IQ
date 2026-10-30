@@ -224,14 +224,14 @@ export const App: React.FC = () => {
             top: `${dogeshPos.y}px`,
             width: `${dogeshSize}px`,
             transition: isMoving
-              ? 'left 3.2s cubic-bezier(0.25, 1, 0.5, 1), top 3.2s cubic-bezier(0.25, 1, 0.5, 1), width 3.2s ease'
-              : 'left 0.8s ease-out, top 0.8s ease-out, width 0.8s ease-out',
+              ? 'left 3.2s cubic-bezier(0.25, 1, 0.5, 1), top 3.2s cubic-bezier(0.25, 1, 0.5, 1), width 1.2s cubic-bezier(0.34, 1.56, 0.64, 1)'
+              : 'left 0.8s ease-out, top 0.8s ease-out, width 1.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
             zIndex: 35,
           }}
           className="dogesh-floating-container flex flex-col items-center pointer-events-auto"
         >
           {comment && (
-            <DogeshComment comment={comment} className="mb-2 max-w-[220px]" />
+            <DogeshComment comment={comment} className="mb-2 max-w-[280px]" />
           )}
           <DogeshAvatar
             state={dogeshState}
