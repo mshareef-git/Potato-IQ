@@ -7,6 +7,7 @@ export type DogeshState = 'idle' | 'attack' | 'guard' | 'laugh' | 'cry' | 'talk'
 export interface DogeshAvatarProps {
   state?: DogeshState;
   size?: number;
+  isSpeaking?: boolean;
   onClick?: () => void;
   onPunchReaction?: (comment: string) => void;
   className?: string;
@@ -14,6 +15,7 @@ export interface DogeshAvatarProps {
 }
 
 const PUNCH_OFFENDED_COMMENTS = [
+  "HEY! THAT WAS UNCALLED FOR!",
   "HOW DARE YOU STRIKE YOUR ROYAL INSTRUCTOR?!",
   "PHYSICAL VIOLENCE?! THAT'S A 50-POINT DEDUCTION FROM YOUR POTATO IQ!",
   "OW! MY REGAL SNOUT! YOU WILL HEAR FROM MY LAWYERS!",
@@ -24,6 +26,7 @@ const PUNCH_OFFENDED_COMMENTS = [
 export const DogeshAvatar: React.FC<DogeshAvatarProps> = ({
   state = 'idle',
   size = 110,
+  isSpeaking = false,
   onClick,
   onPunchReaction,
   className = '',
@@ -77,13 +80,18 @@ export const DogeshAvatar: React.FC<DogeshAvatarProps> = ({
       setIsShaking(false);
     }, 400);
 
-    // Cooldown matches Dogesh retreat/retaliation cycle
+    // ~2.0s cooldown to prevent click/reaction spam
     setTimeout(() => {
       cooldownRef.current = false;
-    }, 2500);
+    }, 2000);
 
     onClick?.();
   }, [allowPunch, onClick, onPunchReaction]);
+
+  // Restrained speaking scale target (1.07), slight bob and tilt, smooth 300ms transition
+  const speakingTransform = isSpeaking
+    ? 'scale-[1.07] -translate-y-1.5 rotate-[1.5deg]'
+    : 'scale-100 translate-y-0 rotate-0';
 
   return (
     <div
@@ -91,8 +99,10 @@ export const DogeshAvatar: React.FC<DogeshAvatarProps> = ({
       role="button"
       tabIndex={0}
       title={state === 'cry' ? "Dogesh is crying! How could you?!" : "Instructor Dogesh (Click to interact / poke)"}
-      className={`relative cursor-pointer select-none transition-transform duration-200 pointer-events-auto ${
-        isShaking ? 'animate-shake scale-110' : 'hover:scale-105 active:scale-95'
+      className={`relative cursor-pointer select-none transition-transform duration-300 ease-out motion-reduce:transform-none pointer-events-auto ${
+        isShaking
+          ? 'animate-shake scale-110'
+          : `${speakingTransform} hover:scale-105 active:scale-95`
       } ${className}`}
       style={{ width: size, height: size }}
     >
@@ -112,3 +122,4 @@ export const DogeshAvatar: React.FC<DogeshAvatarProps> = ({
     </div>
   );
 };
+

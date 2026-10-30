@@ -239,3 +239,43 @@ input, textarea, [contenteditable="true"] {
 .animate-captive-run {
   animation: captive-run 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
+
+/* Print / Export Styles: Landscape A4, isolated certificate only */
+@media print {
+  @page {
+    size: landscape;
+    margin: 1cm;
+  }
+
+  body {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+  }
+
+  header,
+  footer,
+  #space-background-canvas,
+  #theme-toggle-btn,
+  .dogesh-floating-container,
+  .floating-gif-layer,
+  .no-print,
+  button {
+    display: none !important;
+  }
+
+  main {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  #royal-certificate {
+    box-shadow: none !important;
+    border: 6px solid #000000 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    page-break-inside: avoid;
+  }
+}
+

@@ -1,68 +1,52 @@
 // @vitest-environment jsdom
-import { describe, it, expect, beforeAll } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import {
-  sliceIntoTiles,
-  createScrambledTiles,
-  swapTiles,
-  isPuzzleSolved,
+  createScrambledPermutation,
+  swapMosaicTiles,
+  isMosaicSolved,
   countCorrectTiles,
 } from '../../src/levels/WebcamRecovery/webcamPuzzle';
-import { PuzzleTileData } from '../../src/levels/WebcamRecovery/types';
 
-describe('Webcam Puzzle Mechanics', () => {
-  beforeAll(() => {
-    HTMLCanvasElement.prototype.getContext = () => ({
-      drawImage: () => {},
-    }) as any;
-    HTMLCanvasElement.prototype.toDataURL = () => 'data:image/jpeg;base64,mockTile';
-  });
-  it('slices a canvas into exactly 16 square tiles', () => {
-    // Mock canvas
-    const canvas = document.createElement('canvas');
-    canvas.width = 640;
-    canvas.height = 640;
+describe('Live Webcam Mosaic Mechanics', () => {
+  it('generates a 16-element permutation array that is not already solved', () => {
+    const perm = createScrambledPermutation();
+    expect(perm.length).toBe(16);
+    expect(isMosaicSolved(perm)).toBe(false);
+    expect(countCorrectTiles(perm)).toBeLessThanOrEqual(3);
 
-    const tiles = sliceIntoTiles(canvas);
-    expect(tiles.length).toBe(16);
-    expect(tiles[0].originalIndex).toBe(0);
-    expect(tiles[15].originalIndex).toBe(15);
-    expect(isPuzzleSolved(tiles)).toBe(true);
-    expect(countCorrectTiles(tiles)).toBe(16);
+    // Contains all numbers 0..15
+    const sorted = [...perm].sort((a, b) => a - b);
+    expect(sorted).toEqual(Array.from({ length: 16 }, (_, i) => i));
   });
 
-  it('scrambles tiles so that puzzle does not start already solved', () => {
-    const mockTiles: PuzzleTileData[] = Array.from({ length: 16 }, (_, i) => ({
-      id: i,
-      originalIndex: i,
-      currentPosition: i,
-      dataUrl: `data:image/jpeg;base64,mock${i}`,
-    }));
+  it('detects solved vs unsolved permutations accurately', () => {
+    const solved = Array.from({ length: 16 }, (_, i) => i);
+    expect(isMosaicSolved(solved)).toBe(true);
+    expect(countCorrectTiles(solved)).toBe(16);
 
-    const scrambled = createScrambledTiles(mockTiles);
-    expect(scrambled.length).toBe(16);
-    expect(isPuzzleSolved(scrambled)).toBe(false);
-    expect(countCorrectTiles(scrambled)).toBeLessThan(16);
+    const unsolved = [1, 0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+    expect(isMosaicSolved(unsolved)).toBe(false);
+    expect(countCorrectTiles(unsolved)).toBe(14);
   });
 
-  it('correctly swaps tiles and updates positions', () => {
-    const mockTiles: PuzzleTileData[] = Array.from({ length: 16 }, (_, i) => ({
-      id: i,
-      originalIndex: i,
-      currentPosition: i,
-      dataUrl: `data:image/jpeg;base64,mock${i}`,
-    }));
-
-    const swapped = swapTiles(mockTiles, 0, 5);
-    expect(swapped[0].originalIndex).toBe(5);
-    expect(swapped[0].currentPosition).toBe(0);
-    expect(swapped[5].originalIndex).toBe(0);
-    expect(swapped[5].currentPosition).toBe(5);
-    expect(isPuzzleSolved(swapped)).toBe(false);
+  it('correctly swaps two tile positions in the permutation array', () => {
+    const perm = Array.from({ length: 16 }, (_, i) => i);
+    const swapped = swapMosaicTiles(perm, 2, 7);
+    expect(swapped[2]).toBe(7);
+    expect(swapped[7]).toBe(2);
+    expect(swapped[0]).toBe(0);
+    expect(isMosaicSolved(swapped)).toBe(false);
     expect(countCorrectTiles(swapped)).toBe(14);
 
     // Swap back
-    const restored = swapTiles(swapped, 0, 5);
-    expect(isPuzzleSolved(restored)).toBe(true);
+    const restored = swapMosaicTiles(swapped, 2, 7);
+    expect(isMosaicSolved(restored)).toBe(true);
     expect(countCorrectTiles(restored)).toBe(16);
+  });
+
+  it('ignores invalid swap bounds safely', () => {
+    const perm = Array.from({ length: 16 }, (_, i) => i);
+    const invalid = swapMosaicTiles(perm, -1, 20);
+    expect(invalid).toEqual(perm);
   });
 });

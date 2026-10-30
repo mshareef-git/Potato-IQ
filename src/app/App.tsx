@@ -66,7 +66,10 @@ export const App: React.FC = () => {
     isBlocking,
     floatingGifs,
     triggerComment,
+    triggerCustomReaction,
     triggerEventReaction,
+    triggerCaptchaComment,
+    setCaptchaBusy,
     closeGif,
     updateGifPosition,
     shooDogesh,
@@ -77,11 +80,18 @@ export const App: React.FC = () => {
 
   const ActiveComponent = LEVEL_REGISTRY[currentScreen] || LEVEL_REGISTRY.intro;
 
-  const handleDogeshReaction = (text: string, state: 'talk' | 'laugh' | 'smug' | 'angry') => {
-    // Determine if wrong answer should also spawn a brain GIF
-    const spawnCategory = state === 'angry' ? 'brain' : undefined;
-    triggerEventReaction(currentScreen as any, state, spawnCategory);
-  };
+  const handleDogeshReaction = useCallback(
+    (text: string, state: 'talk' | 'laugh' | 'smug' | 'angry', priority?: number) => {
+      if (currentScreen === 'captcha') {
+        triggerCaptchaComment(text, state, (priority || 3) as any);
+      } else {
+        const spawnCategory = state === 'angry' ? 'brain' : undefined;
+        triggerCustomReaction(text, state, spawnCategory);
+      }
+    },
+    [currentScreen, triggerCaptchaComment, triggerCustomReaction]
+  );
+
 
   return (
     <div className="min-h-screen flex flex-col bg-transparent text-[#111111] transition-colors duration-200 relative">
@@ -189,7 +199,10 @@ export const App: React.FC = () => {
 
       {/* Main Challenge Arena */}
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 py-6 md:py-8 flex flex-col justify-center items-center relative game-surface">
-        <ActiveComponent onDogeshReaction={handleDogeshReaction} />
+        <ActiveComponent
+          onDogeshReaction={handleDogeshReaction}
+          onDogeshActivityChange={setCaptchaBusy}
+        />
 
         {/* Dogesh Localized Shield Blocker (if active) */}
         <DogeshBlocker active={isBlocking} onDismiss={() => shooDogesh()} />
@@ -212,10 +225,10 @@ export const App: React.FC = () => {
             width: `${dogeshSize}px`,
             transition: isMoving
               ? 'left 3.2s cubic-bezier(0.25, 1, 0.5, 1), top 3.2s cubic-bezier(0.25, 1, 0.5, 1), width 3.2s ease'
-              : 'none',
+              : 'left 0.8s ease-out, top 0.8s ease-out, width 0.8s ease-out',
             zIndex: 35,
           }}
-          className="flex flex-col items-center pointer-events-auto"
+          className="dogesh-floating-container flex flex-col items-center pointer-events-auto"
         >
           {comment && (
             <DogeshComment comment={comment} className="mb-2 max-w-[220px]" />
@@ -223,6 +236,7 @@ export const App: React.FC = () => {
           <DogeshAvatar
             state={dogeshState}
             size={dogeshSize}
+            isSpeaking={Boolean(comment && (dogeshState === 'talk' || dogeshState === 'smug' || dogeshState === 'laugh'))}
             onClick={() => {}}
             onPunchReaction={(insult) => shooDogesh(insult)}
           />
@@ -236,3 +250,4 @@ export const App: React.FC = () => {
     </div>
   );
 };
+

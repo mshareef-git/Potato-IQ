@@ -106,6 +106,7 @@ export const DOGESH_COMMENTS: Record<DogeshEvent, string[]> = {
     "Your confidence is doing backflips over an empty swimming pool."
   ],
   shooed: [
+    "HEY! THAT WAS UNCALLED FOR!",
     "HOW DARE YOU STRIKE YOUR ROYAL INSTRUCTOR?!",
     "Rude! I was working on my thesis on your incompetence.",
     "Fine. I'll go. Sulking in the corner.",
@@ -129,7 +130,21 @@ export const DOGESH_COMMENTS: Record<DogeshEvent, string[]> = {
   ]
 };
 
+export const CAPTCHA_IDLE_COMMENTS: string[] = [
+  "Look at that webcam feed. Is that a potato or your face?",
+  "Fourteen of your fingers are thoroughly confused right now.",
+  "Your webcam has higher resolution than your problem solving.",
+  "That tile does not belong there. Nor do you.",
+  "I've seen smarter toasters solve CAPTCHAs faster.",
+  "Hold still, you're scaring the computer vision model.",
+  "Pinch harder. Maybe the puzzle will take pity on you.",
+  "Fascinating. Organic intelligence at its absolute lowest frequency.",
+  "Did your brain buffer while loading this puzzle?",
+  "Even a dial-up modem could unscramble a face faster than this."
+];
+
 let lastComment = "";
+let lastCaptchaComment = "";
 
 export function getRandomComment(event: DogeshEvent): string {
   const pool = DOGESH_COMMENTS[event] || DOGESH_COMMENTS.idle;
@@ -141,3 +156,12 @@ export function getRandomComment(event: DogeshEvent): string {
   lastComment = picked;
   return picked;
 }
+
+export function getRandomCaptchaComment(): string {
+  const pool = CAPTCHA_IDLE_COMMENTS;
+  const eligible = pool.filter(c => c !== lastCaptchaComment);
+  const picked = eligible[Math.floor(Math.random() * eligible.length)] || pool[0];
+  lastCaptchaComment = picked;
+  return picked;
+}
+

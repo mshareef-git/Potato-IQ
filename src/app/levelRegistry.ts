@@ -10,8 +10,10 @@ import { WebcamRecovery } from '../levels/WebcamRecovery/WebcamRecovery';
 import { Certificate } from '../components/Certificate';
 
 export interface LevelComponentProps {
-  onDogeshReaction: (comment: string, state: 'talk' | 'laugh' | 'smug' | 'angry') => void;
+  onDogeshReaction: (comment: string, state: 'talk' | 'laugh' | 'smug' | 'angry', priority?: number) => void;
+  onDogeshActivityChange?: (isBusy: boolean) => void;
 }
+
 
 export const LEVEL_REGISTRY: Record<ScreenId, React.ComponentType<LevelComponentProps>> = {
   intro: DogeshIntro as unknown as React.ComponentType<LevelComponentProps>,
