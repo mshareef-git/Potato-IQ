@@ -148,7 +148,7 @@ export const RiddlesSection: React.FC<RiddlesSectionProps> = ({ onDogeshReaction
             <button
               type="button"
               onClick={skipRiddleSub}
-              className="text-xs font-heading px-2.5 py-1 bg-neutral-200 dark:bg-neutral-800 text-[var(--ink)] border-2 border-black rounded shadow-[2px_2px_0px_#000] hover:bg-neutral-300 dark:hover:bg-neutral-700 flex items-center gap-1"
+              className="text-xs font-heading px-2.5 py-1 bg-neutral-200 text-black border-2 border-black rounded shadow-[2px_2px_0px_#000] hover:bg-neutral-300 flex items-center gap-1 cursor-pointer"
               title="Skip this individual riddle"
             >
               <FastForward className="w-3.5 h-3.5" />
@@ -169,22 +169,12 @@ export const RiddlesSection: React.FC<RiddlesSectionProps> = ({ onDogeshReaction
 
             {r1Phase === 'reading' ? (
               <div className="space-y-4 animate-fade-in">
-                <div className="p-5 bg-neutral-100 dark:bg-neutral-900 border-4 border-black rounded-xl shadow-[4px_4px_0px_#000] text-base leading-relaxed text-neutral-900 dark:text-neutral-100">
-                  <p className="font-bold mb-3 text-lg">
-                    You are driving a bus.
-                  </p>
-                  <ul className="list-disc list-inside space-y-1.5 text-sm md:text-base font-medium">
-                    <li>At the first stop, 12 passengers get on.</li>
-                    <li>At the second stop, 5 passengers get off and 8 get on.</li>
-                    <li>At the third stop, 4 passengers get off and 11 get on.</li>
-                    <li>At the fourth stop, 7 passengers get off and 3 get on.</li>
-                    <li>At the fifth stop, 9 passengers get off and 6 get on.</li>
-                    <li>At the sixth stop, 4 passengers get off.</li>
-                  </ul>
-                  <p className="mt-4 font-bold">
-                    You then drive the bus to its final destination.
+                <div className="p-5 bg-neutral-100 border-4 border-black rounded-xl shadow-[4px_4px_0px_#000] text-base leading-relaxed text-neutral-900 font-medium">
+                  <p>
+                    You are driving a bus. At the first stop, 12 passengers get on. At the second stop, 5 passengers get off and 8 get on. At the third stop, 4 passengers get off and 11 get on. At the fourth stop, 7 passengers get off and 3 get on. At the fifth stop, 9 passengers get off and 6 get on. At the sixth stop, 4 passengers get off. You then drive the bus to its final destination. What is the bus driver’s age?
                   </p>
                 </div>
+
 
                 <TimerBar currentSeconds={r1Seconds} totalSeconds={30} label="STORY MEMORIZATION TIMER (30s)" />
 
@@ -198,11 +188,11 @@ export const RiddlesSection: React.FC<RiddlesSectionProps> = ({ onDogeshReaction
             ) : (
               /* Answering panel: Story is completely hidden, decoy math shown */
               <div className="space-y-4 animate-slide-down">
-                <div className="p-4 bg-[var(--surface)] border-4 border-black rounded-xl shadow-[4px_4px_0px_#000] text-center">
-                  <div className="text-xs font-bold text-neutral-500 uppercase tracking-widest mb-2">
+                <div className="p-4 bg-white border-4 border-black rounded-xl shadow-[4px_4px_0px_#000] text-center">
+                  <div className="text-xs font-bold text-neutral-600 uppercase tracking-widest mb-2">
                     CALCULATE FINAL PASSENGER HARMONIC:
                   </div>
-                  <div className="p-3 bg-neutral-100 dark:bg-neutral-900 border-2 border-black rounded-lg font-mono text-xl md:text-2xl font-black text-[var(--purple)]">
+                  <div className="p-3 bg-white border-3 border-black rounded-lg font-mono text-xl md:text-2xl font-black text-black">
                     (x² - 9) / (x - 3) + √144 = 2x + 9, &nbsp; x ≠ 3
                   </div>
                 </div>
@@ -225,7 +215,7 @@ export const RiddlesSection: React.FC<RiddlesSectionProps> = ({ onDogeshReaction
                   />
 
                   {r1Error && (
-                    <div className="flex items-center gap-1.5 p-3 bg-red-100 dark:bg-red-950/60 text-red-700 dark:text-red-300 border-2 border-black rounded-lg text-xs md:text-sm font-bold animate-shake">
+                    <div className="flex items-center gap-1.5 p-3 bg-red-100 text-red-800 border-2 border-black rounded-lg text-xs md:text-sm font-bold animate-shake">
                       <AlertCircle className="w-4 h-4 flex-shrink-0" />
                       <span>{r1Error}</span>
                     </div>
@@ -250,7 +240,7 @@ export const RiddlesSection: React.FC<RiddlesSectionProps> = ({ onDogeshReaction
               <span>RIDDLE 2 OF 3: PROBABILITY PUZZLE</span>
             </div>
 
-            <div className="p-5 bg-neutral-100 dark:bg-neutral-900 border-4 border-black rounded-xl shadow-[4px_4px_0px_#000] text-base md:text-lg leading-relaxed text-neutral-900 dark:text-neutral-100 font-medium">
+            <div className="p-5 bg-neutral-100 border-4 border-black rounded-xl shadow-[4px_4px_0px_#000] text-base md:text-lg leading-relaxed text-neutral-900 font-medium">
               <p className="mb-2">
                 Mary has <strong>2 children</strong>.
               </p>
@@ -263,12 +253,12 @@ export const RiddlesSection: React.FC<RiddlesSectionProps> = ({ onDogeshReaction
             </div>
 
             {r2LockedOut ? (
-              <div className="p-5 bg-red-100 dark:bg-red-950/70 border-4 border-black rounded-xl text-center space-y-3 animate-shake">
+              <div className="p-5 bg-red-100 border-4 border-black rounded-xl text-center space-y-3 animate-shake">
                 <div className="flex items-center justify-center gap-2 text-[var(--red)] font-heading text-lg">
                   <Lock className="w-5 h-5 animate-pulse" />
                   <span>10-SECOND SHAME LOCKOUT!</span>
                 </div>
-                <p className="text-sm font-bold text-neutral-800 dark:text-neutral-200">
+                <p className="text-sm font-bold text-neutral-900">
                   Wrong answer! Savor 10 seconds of Dogesh laughing at your statistics skills.
                 </p>
                 <TimerBar currentSeconds={lockoutSeconds} totalSeconds={10} label="LOCKOUT TIMER" />
@@ -281,8 +271,8 @@ export const RiddlesSection: React.FC<RiddlesSectionProps> = ({ onDogeshReaction
                   autoFocus
                   value={r2Input}
                   onChange={(e) => setR2Input(e.target.value)}
-                  placeholder="Enter percentage (e.g. 51.8%)"
-                  className="neo-input text-center font-mono text-xl font-bold py-3"
+                  placeholder="Enter your answer"
+                  className="neo-input text-center font-mono text-xl font-bold py-3 bg-white text-black"
                 />
 
                 <NeoButton type="submit" variant="yellow" fullWidth size="lg">
@@ -303,24 +293,25 @@ export const RiddlesSection: React.FC<RiddlesSectionProps> = ({ onDogeshReaction
               <span>RIDDLE 3 OF 3: THE TEMPORAL PARADOX</span>
             </div>
 
-            <div className="p-5 bg-neutral-100 dark:bg-neutral-900 border-4 border-black rounded-xl shadow-[4px_4px_0px_#000] text-base md:text-lg leading-relaxed text-neutral-900 dark:text-neutral-100">
-              <p className="mb-2 italic text-neutral-600 dark:text-neutral-400">
-                Earlier this year, a logician friend told me a fun fact. She said:
+            <div className="p-5 bg-neutral-100 border-4 border-black rounded-xl shadow-[4px_4px_0px_#000] text-base md:text-lg leading-relaxed text-neutral-900">
+              <p className="mb-2 italic text-neutral-700">
+                Earlier this year, a logician friend told me a curious fact. She said:
               </p>
-              <blockquote className="border-l-4 border-[var(--purple)] pl-3 my-3 font-heading text-lg md:text-xl text-[var(--ink)]">
+
+              <blockquote className="border-l-4 border-[var(--purple)] pl-3 my-3 font-heading text-lg md:text-xl text-black">
                 "Two days ago, I was 13 years old, but next year I will have my 16th birthday."
               </blockquote>
-              <p className="font-heading text-lg text-[var(--ink)] mt-4">
+              <p className="font-heading text-lg text-black mt-4">
                 When is the logician's birthday?
               </p>
             </div>
 
             {r3Solved ? (
-              <div className="p-5 bg-green-100 dark:bg-green-950/70 border-4 border-black rounded-xl text-center space-y-3 animate-slide-down">
-                <div className="font-heading text-xl md:text-2xl text-green-800 dark:text-green-300">
+              <div className="p-5 bg-green-100 border-4 border-black rounded-xl text-center space-y-3 animate-slide-down">
+                <div className="font-heading text-xl md:text-2xl text-green-800">
                   🎉 ALL RIDDLES SOLVED!
                 </div>
-                <p className="text-base text-neutral-800 dark:text-neutral-200 font-bold">
+                <p className="text-base text-neutral-900 font-bold">
                   December 31 is correct! You saw right through the January 1 paradox.
                 </p>
                 <div className="pt-2">
@@ -333,7 +324,7 @@ export const RiddlesSection: React.FC<RiddlesSectionProps> = ({ onDogeshReaction
             ) : (
               <form onSubmit={handleR3Submit} className="space-y-4 max-w-sm mx-auto">
                 <div>
-                  <label className="block text-xs font-heading uppercase text-neutral-700 dark:text-neutral-300 mb-1.5">
+                  <label className="block text-xs font-heading uppercase text-neutral-900 mb-1.5">
                     Select Birth Date:
                   </label>
                   {/* Single combined date dropdown with subtle December 31 underline */}
@@ -341,7 +332,7 @@ export const RiddlesSection: React.FC<RiddlesSectionProps> = ({ onDogeshReaction
                 </div>
 
                 {r3Error && (
-                  <div className="flex items-center gap-1.5 p-3 bg-red-100 dark:bg-red-950/60 text-red-700 dark:text-red-300 border-2 border-black rounded-lg text-xs md:text-sm font-bold animate-shake">
+                  <div className="flex items-center gap-1.5 p-3 bg-red-100 text-red-800 border-2 border-black rounded-lg text-xs md:text-sm font-bold animate-shake">
                     <AlertCircle className="w-4 h-4 flex-shrink-0" />
                     <span>{r3Error}</span>
                   </div>

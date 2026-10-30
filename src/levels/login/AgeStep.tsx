@@ -41,10 +41,10 @@ export const AgeStep: React.FC<AgeStepProps> = ({ onComplete, onDogeshReaction }
   return (
     <div className="space-y-4">
       <div className="text-center">
-        <h2 className="font-heading text-xl md:text-2xl text-[var(--ink)] mb-1">
+        <h2 className="font-heading text-xl md:text-2xl text-black mb-1">
           STEP 4: AGE DECLARATION
         </h2>
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+        <p className="text-sm text-neutral-900 font-semibold">
           Enter your current age (13–99).
         </p>
       </div>

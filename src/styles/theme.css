@@ -5,32 +5,28 @@
   --yellow: #FFD21F;
   --purple: #8B5CF6;
   --pink: #F43F97;
-  --green: #A3E635;
+  --green: #22C55E;
   --red: #EF4444;
   --blue: #6EC6FF;
-  --dark: #000000;
+  --dark: #111111;
   --border-color: #111111;
   --shadow-color: #111111;
   --card-bg: #FFFFFF;
   --text-main: #111111;
-  --text-muted: #555555;
+  --text-heading: #000000;
+  --text-muted: #374151;
   --dot-color: rgba(17, 17, 17, 0.08);
+
+  /* Explicit scene tokens */
+  --scene-dark-bg: #171717;
+  --scene-dark-text: #F5F5F5;
+  --scene-dark-border: #111111;
 }
 
-.dark {
-  --paper: #000000;
-  --surface: #121212;
-  --ink: #FFFFFF;
-  --yellow: #FFD21F;
-  --purple: #A78BFA;
-  --pink: #F43F97;
-  --green: #A3E635;
-  --red: #EF4444;
-  --blue: #6EC6FF;
-  --border-color: #FFFFFF;
-  --shadow-color: #FFFFFF;
-  --card-bg: #121212;
-  --text-main: #FFFFFF;
-  --text-muted: #AAAAAA;
-  --dot-color: rgba(255, 255, 255, 0.12);
-}
+/* 
+  The dark mode in this game is an intentional prank:
+  The entire viewport is blacked out via App.tsx full-screen overlay.
+  Card tokens remain high-contrast ink on paper.
+*/
+
+

@@ -1,4 +1,5 @@
 export type DogeshEvent =
+  | "intro"
   | "name"
   | "password-rejected"
   | "password-accepted"
@@ -7,7 +8,6 @@ export type DogeshEvent =
   | "trolley"
   | "hangman"
   | "maze"
-  | "quiz"
   | "riddles"
   | "skip"
   | "timeout"
@@ -15,9 +15,15 @@ export type DogeshEvent =
   | "idle"
   | "shooed"
   | "wrong-answer"
-  | "correct-answer";
+  | "correct-answer"
+  | "spawn-gif";
 
 export const DOGESH_COMMENTS: Record<DogeshEvent, string[]> = {
+  intro: [
+    "Welcome to your intellectual execution.",
+    "Prepare your excuses now.",
+    "I've seen smarter vegetables, but let's see."
+  ],
   name: [
     "That name is not going to last. Let me fix it.",
     "I've renamed you. You're welcome.",
@@ -26,6 +32,7 @@ export const DOGESH_COMMENTS: Record<DogeshEvent, string[]> = {
     "Congratulations. You have been demoted to Smooth Brain."
   ],
   "password-rejected": [
+    "Too strong! Dumb it down.",
     "Too strong. This is an IQ test, not a bank.",
     "That password has too many brain cells. Try something sadder.",
     "Rejected for being too clever. Make it worse.",
@@ -63,19 +70,13 @@ export const DOGESH_COMMENTS: Record<DogeshEvent, string[]> = {
   maze: [
     "Take your time. Take all of it. I'm immortal.",
     "Another dead end. You do love those.",
+    "Who said you had to respect the walls?",
     "Who said you have to stay inside?"
   ],
-  quiz: [
-    "That's wrong. And the hint was RIGHT THERE.",
-    "Read the question. With your eyes. Both of them.",
-    "Wrong. Read the first four words again.",
-    "You've got numbers confused with confidence.",
-    "A hint? In THIS economy?"
-  ],
   riddles: [
-    "That's wrong. And the hint was RIGHT THERE.",
+    "That's wrong. And the answer is right in front of you.",
     "Read the question. With your eyes. Both of them.",
-    "Wrong. Read the first four words again.",
+    "Wrong. Read the very first sentence again.",
     "You've got numbers confused with confidence.",
     "A hint? In THIS economy?"
   ],
@@ -95,26 +96,36 @@ export const DOGESH_COMMENTS: Record<DogeshEvent, string[]> = {
     "Dark mode? Your brain was already there."
   ],
   idle: [
-    "Are you thinking? It's so quiet in there.",
-    "I've seen goldfish with a better strategy.",
+    "Are you thinking? It’s so quiet in there.",
     "I believe in you. This is a mistake on my part.",
-    "Your confidence is doing backflips over an empty swimming pool.",
-    "I moved the button two centimetres. Please remain calm."
+    "That answer came from the factory-reset part of your brain.",
+    "Professional Button Presser behaviour detected.",
+    "My dog bowl has a more promising applicant.",
+    "You’re taking the test. I’m taking emotional damage.",
+    "I've seen goldfish with a better strategy.",
+    "Your confidence is doing backflips over an empty swimming pool."
   ],
   shooed: [
-    "Rude. I was working.",
-    "Fine. I'll go. Sulking.",
-    "Do you hit all your teachers?"
+    "HOW DARE YOU STRIKE YOUR ROYAL INSTRUCTOR?!",
+    "Rude! I was working on my thesis on your incompetence.",
+    "Fine. I'll go. Sulking in the corner.",
+    "Do you hit all your educators?"
   ],
   "wrong-answer": [
-    "Wrong. But points for trying so aggressively bad.",
-    "Incorrect! Even the dog knows this one.",
+    "Wrong. That answer came from the factory-reset part of your brain.",
+    "Incorrect! Even my chew toy knows this one.",
     "Have you considered guessing randomly? It might improve your score."
   ],
   "correct-answer": [
     "A broken clock is right twice a day.",
     "Did you look that up? Be honest.",
     "Fine, you got one right. Don't let it go to your head."
+  ],
+  "spawn-gif": [
+    "Distraction incoming! Try focusing through THIS.",
+    "Enjoy this retro pop-up from my personal collection.",
+    "You looked bored. Here's some vintage internet chaos.",
+    "Behold! A distraction engineered specifically to derail your thoughts."
   ]
 };
 

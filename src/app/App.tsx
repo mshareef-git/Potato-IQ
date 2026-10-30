@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { LEVEL_REGISTRY } from './levelRegistry';
 import { isScoredRound, FLOW_ORDER } from './gameFlow';
 import { ProgressIndicator } from '../components/ProgressIndicator';
 import { SkipRoundButton } from '../components/SkipRoundButton';
 import { ThemeToggle } from '../components/ThemeToggle';
+import { AudioHeaderControl } from '../components/AudioHeaderControl';
 import { DogeshAvatar } from '../components/DogeshAvatar';
 import { DogeshComment } from '../components/DogeshComment';
 import { DogeshBlocker } from '../components/DogeshBlocker';
+import { FloatingGifManager } from '../components/FloatingGifManager';
+import { SpaceBackground } from '../components/SpaceBackground';
 import { useDogeshInterruptions } from '../hooks/useDogeshInterruptions';
 import { Terminal } from 'lucide-react';
 
@@ -19,44 +22,72 @@ export const App: React.FC = () => {
   const toggleTheme = useGameStore((state) => state.toggleTheme);
 
   const [showDevNav, setShowDevNav] = useState(false);
+  const [toggleRect, setToggleRect] = useState<{ top: number; left: number; width: number; height: number }>({
+    top: 12,
+    left: typeof window !== 'undefined' ? window.innerWidth - 140 : 900,
+    width: 120,
+    height: 38,
+  });
 
   const isBlankDarkMode = theme === 'dark';
 
-  // Dogesh interruptions and character state
+  const updateToggleRect = useCallback(() => {
+    const el = document.getElementById('theme-toggle-btn');
+    if (el) {
+      const r = el.getBoundingClientRect();
+      setToggleRect({ top: r.top, left: r.left, width: r.width, height: r.height });
+    }
+  }, []);
+
+  useEffect(() => {
+    updateToggleRect();
+    window.addEventListener('resize', updateToggleRect);
+    return () => window.removeEventListener('resize', updateToggleRect);
+  }, [updateToggleRect]);
+
+  // Support Escape key to exit dark mode gag
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isBlankDarkMode) {
+        toggleTheme();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isBlankDarkMode, toggleTheme]);
+
+  // Dogesh interruptions and character state (coordinated with GIF summons)
   const {
     dogeshState,
     comment,
-    anchor,
+    dogeshPos,
+    dogeshSize,
+    isMoving,
     isBlocking,
+    floatingGifs,
     triggerComment,
+    triggerEventReaction,
+    closeGif,
+    updateGifPosition,
     shooDogesh,
   } = useDogeshInterruptions({
     currentScreen,
-    allowBlocker: currentScreen !== 'login' && currentScreen !== 'result' && !isBlankDarkMode
+    allowBlocker: currentScreen !== 'intro' && currentScreen !== 'login' && currentScreen !== 'result' && !isBlankDarkMode
   });
 
-  const ActiveComponent = LEVEL_REGISTRY[currentScreen];
+  const ActiveComponent = LEVEL_REGISTRY[currentScreen] || LEVEL_REGISTRY.intro;
 
   const handleDogeshReaction = (text: string, state: 'talk' | 'laugh' | 'smug' | 'angry') => {
-    triggerComment(currentScreen as any, state);
-  };
-
-  const getAnchorClasses = () => {
-    switch (anchor) {
-      case 'left-card':
-        return 'fixed left-4 bottom-12 md:bottom-20 z-20 flex flex-col items-center';
-      case 'top-right':
-        return 'fixed right-4 top-16 md:top-20 z-20 flex flex-col items-end';
-      case 'bottom-right':
-        return 'fixed right-4 bottom-4 md:bottom-8 z-20 flex flex-col items-end';
-      case 'right-card':
-      default:
-        return 'fixed right-4 bottom-12 md:bottom-20 z-20 flex flex-col items-end';
-    }
+    // Determine if wrong answer should also spawn a brain GIF
+    const spawnCategory = state === 'angry' ? 'brain' : undefined;
+    triggerEventReaction(currentScreen as any, state, spawnCategory);
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F7F4EF] text-[#111111] neo-grid-bg transition-colors duration-200">
+    <div className="min-h-screen flex flex-col bg-transparent text-[#111111] transition-colors duration-200 relative">
+      {/* 3D Fast-Moving Monochrome Space Starfield */}
+      <SpaceBackground />
+
       {/* 
         ========================================================================
         SATIRICAL DARK MODE OVERLAY:
@@ -67,12 +98,20 @@ export const App: React.FC = () => {
       */}
       {isBlankDarkMode && (
         <div className="fixed inset-0 z-50 bg-black cursor-default select-none pointer-events-auto">
-          {/* Invisible interactive target at top-right (matching original position) */}
+          {/* Invisible interactive target matching ThemeToggle position at exact coordinates */}
           <button
+            id="blank-mode-restore-btn"
             onClick={toggleTheme}
             aria-label="Toggle light mode"
-            className="fixed top-3 right-4 w-32 h-10 opacity-0 cursor-pointer"
-            title=""
+            style={{
+              position: 'fixed',
+              top: `${toggleRect.top}px`,
+              left: `${toggleRect.left}px`,
+              width: `${toggleRect.width}px`,
+              height: `${toggleRect.height}px`,
+            }}
+            className="opacity-0 cursor-pointer z-50"
+            title="Restore Light Mode"
           />
         </div>
       )}
@@ -88,7 +127,7 @@ export const App: React.FC = () => {
                 BRAIN TESTER: POTATO IQ
               </div>
               <div className="text-[10px] text-neutral-600 font-bold uppercase tracking-wider">
-                MadHackd Assessment
+                MadHackd Assessment · Instructor Dogesh
               </div>
             </div>
           </div>
@@ -103,12 +142,14 @@ export const App: React.FC = () => {
             )}
           </div>
 
-          {/* Right: Theme Toggle & Dev Nav Button */}
+          {/* Right: Audio Control, Dev Nav & Theme Toggle */}
           <div className="flex items-center gap-2">
+            <AudioHeaderControl />
             <button
               onClick={() => setShowDevNav((prev) => !prev)}
               className="p-1.5 text-xs border-2 border-black rounded bg-neutral-100 hover:bg-yellow-200 text-black transition-colors"
               title="Dev Navigation Panel"
+              aria-label="Open Dev Nav"
             >
               <Terminal className="w-4 h-4" />
             </button>
@@ -146,29 +187,51 @@ export const App: React.FC = () => {
         </div>
       )}
 
-      {/* Main Challenge Arena (Enlarged to 85–90% width, ~1100–1200px max) */}
-      <main className="flex-1 max-w-6xl w-full mx-auto px-4 py-6 md:py-8 flex flex-col justify-center items-center relative">
+      {/* Main Challenge Arena */}
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 py-6 md:py-8 flex flex-col justify-center items-center relative game-surface">
         <ActiveComponent onDogeshReaction={handleDogeshReaction} />
 
-        {/* Dogesh Comedic Blocker (if active) */}
-        <DogeshBlocker active={isBlocking} onDismiss={shooDogesh} />
+        {/* Dogesh Localized Shield Blocker (if active) */}
+        <DogeshBlocker active={isBlocking} onDismiss={() => shooDogesh()} />
       </main>
 
-      {/* Persistent Dogesh Avatar & Speech Bubble Overlay */}
-      <div className={getAnchorClasses()}>
-        {comment && (
-          <DogeshComment comment={comment} className="mb-2" />
-        )}
-        <DogeshAvatar
-          state={dogeshState}
-          size={110}
-          onClick={shooDogesh}
-        />
-      </div>
+      {/* Movable Floating GIFs Summoned Exclusively By Dogesh */}
+      <FloatingGifManager
+        instances={floatingGifs}
+        onCloseGif={closeGif}
+        onPositionChange={updateGifPosition}
+      />
+
+      {/* Persistent Dogesh Avatar & Speech Bubble Overlay (only after intro) */}
+      {currentScreen !== 'intro' && (
+        <div
+          style={{
+            position: 'fixed',
+            left: `${dogeshPos.x}px`,
+            top: `${dogeshPos.y}px`,
+            width: `${dogeshSize}px`,
+            transition: isMoving
+              ? 'left 3.2s cubic-bezier(0.25, 1, 0.5, 1), top 3.2s cubic-bezier(0.25, 1, 0.5, 1), width 3.2s ease'
+              : 'none',
+            zIndex: 35,
+          }}
+          className="flex flex-col items-center pointer-events-auto"
+        >
+          {comment && (
+            <DogeshComment comment={comment} className="mb-2 max-w-[220px]" />
+          )}
+          <DogeshAvatar
+            state={dogeshState}
+            size={dogeshSize}
+            onClick={() => {}}
+            onPunchReaction={(insult) => shooDogesh(insult)}
+          />
+        </div>
+      )}
 
       {/* Minimal Footer Strip */}
-      <footer className="text-center py-2.5 text-xs text-neutral-500 font-semibold border-t-2 border-dashed border-neutral-300">
-        <span>Instructor Dogesh · MadHackd</span>
+      <footer className="text-center py-2.5 text-xs text-neutral-400 font-semibold border-t-2 border-dashed border-neutral-700 bg-black/60 backdrop-blur-sm z-10">
+        <span>Instructor Dogesh · MadHackd Institute</span>
       </footer>
     </div>
   );

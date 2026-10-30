@@ -102,9 +102,9 @@ export const TrolleyLevel: React.FC<TrolleyLevelProps> = ({ onDogeshReaction }) 
         {/* Scenario description & choices */}
         {!outcome && !isMathActive && (
           <div className="mt-5 space-y-4">
-            <p className="text-base md:text-lg leading-relaxed text-black dark:text-neutral-100 font-medium">
-              A runaway trolley is speeding towards <strong>five people</strong> tied to the default track.
-              You stand next to a lever that will divert it onto a side track where <strong>one person</strong> is tied.
+            <p className="text-base md:text-lg leading-relaxed text-neutral-900 font-bold">
+              A runaway trolley is speeding towards <strong className="text-black underline">five people</strong> tied to the default track.
+              You stand next to a lever that will divert it onto a side track where <strong className="text-black underline">one person</strong> is tied.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
@@ -115,17 +115,17 @@ export const TrolleyLevel: React.FC<TrolleyLevelProps> = ({ onDogeshReaction }) 
                 className="flex items-center justify-center gap-2 py-3.5 text-base md:text-lg"
               >
                 <span>PULL THE LEVER</span>
-                <span className="text-xs opacity-90 font-bold">(SAVE 5, KILL 1)</span>
+                <span className="text-xs font-black text-black bg-white/40 px-2 py-0.5 rounded border border-black/30">(SAVE 5, KILL 1)</span>
               </NeoButton>
 
               <NeoButton
                 variant="white"
                 size="lg"
                 onClick={handleDoNothing}
-                className="flex items-center justify-center gap-2 py-3.5 text-base md:text-lg text-black"
+                className="flex items-center justify-center gap-2 py-3.5 text-base md:text-lg text-black bg-white hover:bg-neutral-100"
               >
                 <span>DO NOTHING</span>
-                <span className="text-xs opacity-90 font-bold text-neutral-800">(LET 5 DIE)</span>
+                <span className="text-xs font-black text-neutral-900 bg-neutral-200 px-2 py-0.5 rounded border border-black/30">(LET 5 DIE)</span>
               </NeoButton>
             </div>
           </div>
@@ -139,12 +139,12 @@ export const TrolleyLevel: React.FC<TrolleyLevelProps> = ({ onDogeshReaction }) 
               <span>EMERGENCY MECHANICAL LOCKOUT!</span>
             </div>
 
-            <p className="text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-3">
+            <p className="text-sm font-bold text-neutral-900 mb-3">
               The switch lever is locked by an emergency mechanical lock! Solve the calculation before the trolley reaches the fork:
             </p>
 
-            <div className="p-4 bg-neutral-100 dark:bg-neutral-900 border-3 border-black rounded-lg text-center my-3">
-              <div className="font-mono text-3xl font-black tracking-wider text-[var(--ink)]">
+            <div className="p-4 bg-white border-4 border-black rounded-xl text-center my-3 shadow-[4px_4px_0px_#000]">
+              <div className="font-mono text-2xl md:text-3xl font-black tracking-wider text-black">
                 {TROLLEY_MATH_CHALLENGE.expression} = ?
               </div>
             </div>
@@ -162,7 +162,7 @@ export const TrolleyLevel: React.FC<TrolleyLevelProps> = ({ onDogeshReaction }) 
                     if (mathError) setMathError(null);
                   }}
                   placeholder="Enter calculation result..."
-                  className="neo-input font-mono text-xl font-bold text-center"
+                  className="neo-input font-mono text-xl font-bold text-center bg-white text-black border-3 border-black"
                 />
                 <NeoButton type="submit" variant="yellow" size="md">
                   SUBMIT
@@ -170,7 +170,7 @@ export const TrolleyLevel: React.FC<TrolleyLevelProps> = ({ onDogeshReaction }) 
               </div>
 
               {mathError && (
-                <p className="text-xs font-bold text-red-600 dark:text-red-400 text-center animate-shake">
+                <p className="text-xs font-bold text-red-600 text-center animate-shake">
                   {mathError}
                 </p>
               )}
@@ -180,14 +180,14 @@ export const TrolleyLevel: React.FC<TrolleyLevelProps> = ({ onDogeshReaction }) 
 
         {/* Outcome Consequences */}
         {outcome && (
-          <div className="mt-5 p-5 bg-neutral-100 dark:bg-neutral-900 border-4 border-black rounded-xl shadow-[6px_6px_0px_#000] space-y-3 animate-fade-in">
-            <div className="font-heading text-lg md:text-xl text-[var(--ink)]">
+          <div className="mt-5 p-5 bg-white border-4 border-black rounded-xl shadow-[6px_6px_0px_#000] space-y-3 animate-fade-in text-black">
+            <div className="font-heading text-lg md:text-xl text-black">
               {outcome === 'five-saved-one-hit' && '✅ OUTCOME: 5 SAVED, 1 SACRIFICED'}
               {outcome === 'five-hit' && '💀 OUTCOME: YOU WATCHED 5 PEOPLE HIT'}
               {outcome === 'both-groups-hit' && '💥 OUTCOME: LEVER BROKE, TROLLEY SPLIT! ALL 6 HIT!'}
             </div>
 
-            <p className="text-sm md:text-base text-neutral-800 dark:text-neutral-200 leading-relaxed font-medium">
+            <p className="text-sm md:text-base text-neutral-900 leading-relaxed font-bold">
               {outcome === 'five-saved-one-hit' &&
                 'Your lightning calculation unjammed the lever in time! The trolley diverted onto the side track. Five survived, one sacrificed.'}
               {outcome === 'five-hit' &&
@@ -205,7 +205,7 @@ export const TrolleyLevel: React.FC<TrolleyLevelProps> = ({ onDogeshReaction }) 
               <button
                 type="button"
                 onClick={handleRetry}
-                className="px-4 py-2 text-xs font-heading border-2 border-black rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-800 text-[var(--ink)] shadow-[2px_2px_0px_#000] transition-colors inline-flex items-center gap-1.5"
+                className="px-4 py-2 text-xs font-heading border-2 border-black rounded-lg bg-white hover:bg-neutral-200 text-black shadow-[2px_2px_0px_#000] transition-colors inline-flex items-center gap-1.5 cursor-pointer"
               >
                 <RotateCcw className="w-4 h-4" />
                 <span>RETRY DILEMMA</span>

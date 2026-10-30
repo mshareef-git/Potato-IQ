@@ -3,9 +3,10 @@ import { getCertificateTitle, ALL_SKIPPED_TITLES, REGULAR_CERTIFICATE_TITLES } f
 import { SCORED_ROUND_IDS } from '../../src/app/gameFlow';
 
 describe('Scoring & Certificate Rules', () => {
-  it('has exactly 5 scored rounds with unified riddles section', () => {
-    expect(SCORED_ROUND_IDS.length).toBe(5);
+  it('has exactly 4 scored rounds with unified riddles section (no quiz)', () => {
+    expect(SCORED_ROUND_IDS.length).toBe(4);
   });
+
 
   it('selects forced title and stamp when all rounds are skipped', () => {
     const result = getCertificateTitle(true);

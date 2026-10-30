@@ -170,22 +170,22 @@ export const RotaryDialerStep: React.FC<RotaryDialerStepProps> = ({ onComplete, 
   return (
     <div className="space-y-5 max-w-lg mx-auto py-2">
       <div className="text-center">
-        <h2 className="font-heading text-2xl md:text-3xl text-[var(--ink)] mb-1">
+        <h2 className="font-heading text-2xl md:text-3xl text-black mb-1">
           STEP 3: ROTARY PHONE DIAL
         </h2>
-        <p className="text-sm text-neutral-700 dark:text-neutral-300">
+        <p className="text-sm text-neutral-900 font-semibold">
           Dial a fictional phone number (7–15 digits) using the rotary wheel.
         </p>
       </div>
 
       {/* Phone Number Display Slots */}
-      <div className="p-3 bg-neutral-100 dark:bg-neutral-900 border-4 border-black rounded-xl shadow-[4px_4px_0px_#000] text-center">
-        <div className="text-[11px] font-heading uppercase tracking-wider text-neutral-500 mb-1">
+      <div className="p-3 bg-neutral-100 border-4 border-black rounded-xl shadow-[4px_4px_0px_#000] text-center">
+        <div className="text-[11px] font-heading uppercase tracking-wider text-neutral-900 font-bold mb-1">
           NUMBER SLOTS ({digits.length}/15)
         </div>
         <div className="flex justify-center items-center gap-1.5 flex-wrap min-h-[44px]">
           {digits.length === 0 ? (
-            <span className="text-xs text-neutral-400 font-bold uppercase tracking-wider">
+            <span className="text-xs text-neutral-700 font-bold uppercase tracking-wider">
               [ SPIN DIGITS TOWARDS THE STOPPER ]
             </span>
           ) : (
@@ -209,7 +209,7 @@ export const RotaryDialerStep: React.FC<RotaryDialerStepProps> = ({ onComplete, 
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
           onPointerCancel={handlePointerUp}
-          className="relative rounded-full border-4 border-black bg-[#E5E0D8] dark:bg-neutral-800 shadow-[6px_6px_0px_#000]"
+          className="relative rounded-full border-4 border-black bg-[#E5E0D8] shadow-[6px_6px_0px_#000]"
           style={{ width: DIAL_RADIUS * 2, height: DIAL_RADIUS * 2 }}
         >
           {/* Numbers printed on base underneath holes */}
@@ -221,7 +221,7 @@ export const RotaryDialerStep: React.FC<RotaryDialerStepProps> = ({ onComplete, 
             return (
               <div
                 key={`base-${h.digit}`}
-                className="absolute flex items-center justify-center font-heading text-lg font-black text-black dark:text-white pointer-events-none"
+                className="absolute flex items-center justify-center font-heading text-lg font-black text-black pointer-events-none"
                 style={{
                   width: 32,
                   height: 32,
@@ -258,7 +258,7 @@ export const RotaryDialerStep: React.FC<RotaryDialerStepProps> = ({ onComplete, 
             }}
           >
             {/* Center wheel plate */}
-            <div className="absolute inset-4 rounded-full border-3 border-black bg-white/70 dark:bg-neutral-700/60 backdrop-blur-[1px]">
+            <div className="absolute inset-4 rounded-full border-3 border-black bg-white/70 backdrop-blur-[1px]">
               {/* Center emblem / rotary hub */}
               <div className="absolute inset-[36%] rounded-full bg-[var(--yellow)] border-3 border-black shadow-[2px_2px_0px_#000] flex items-center justify-center">
                 <span className="text-xl">☎️</span>
@@ -276,7 +276,7 @@ export const RotaryDialerStep: React.FC<RotaryDialerStepProps> = ({ onComplete, 
                   key={`hole-${h.digit}`}
                   onPointerDown={(e) => handlePointerDownHole(e, h)}
                   onClick={() => handleHoleClick(h)}
-                  className="absolute cursor-pointer rounded-full border-3 border-black bg-[#FDFBF7] dark:bg-neutral-900 hover:bg-yellow-200 shadow-[inset_0px_2px_4px_rgba(0,0,0,0.3)] flex items-center justify-center active:scale-95 transition-transform"
+                  className="absolute cursor-pointer rounded-full border-3 border-black bg-[#FDFBF7] hover:bg-yellow-200 shadow-[inset_0px_2px_4px_rgba(0,0,0,0.3)] flex items-center justify-center active:scale-95 transition-transform"
                   style={{
                     width: 38,
                     height: 38,
@@ -285,7 +285,7 @@ export const RotaryDialerStep: React.FC<RotaryDialerStepProps> = ({ onComplete, 
                   }}
                   title={`Dial ${h.digit}`}
                 >
-                  <span className="font-heading text-sm font-bold text-neutral-800 dark:text-neutral-200">
+                  <span className="font-heading text-sm font-black text-black">
                     {h.digit}
                   </span>
                 </div>
@@ -301,7 +301,7 @@ export const RotaryDialerStep: React.FC<RotaryDialerStepProps> = ({ onComplete, 
           type="button"
           onClick={handleClear}
           disabled={digits.length === 0 || isSuccess}
-          className="flex-1 py-2 flex items-center justify-center gap-1.5 text-xs font-heading border-2 border-black rounded-lg bg-white dark:bg-neutral-800 text-[var(--ink)] shadow-[2px_2px_0px_#000] hover:bg-red-100 disabled:opacity-40"
+          className="flex-1 py-2 flex items-center justify-center gap-1.5 text-xs font-heading border-2 border-black rounded-lg bg-white text-black shadow-[2px_2px_0px_#000] hover:bg-red-100 disabled:opacity-40 cursor-pointer"
         >
           <RotateCcw className="w-3.5 h-3.5" />
           <span>CLEAR</span>
@@ -311,7 +311,7 @@ export const RotaryDialerStep: React.FC<RotaryDialerStepProps> = ({ onComplete, 
           type="button"
           onClick={handleBackspace}
           disabled={digits.length === 0 || isSuccess}
-          className="flex-1 py-2 flex items-center justify-center gap-1.5 text-xs font-heading border-2 border-black rounded-lg bg-white dark:bg-neutral-800 text-[var(--ink)] shadow-[2px_2px_0px_#000] hover:bg-yellow-100 disabled:opacity-40"
+          className="flex-1 py-2 flex items-center justify-center gap-1.5 text-xs font-heading border-2 border-black rounded-lg bg-white text-black shadow-[2px_2px_0px_#000] hover:bg-yellow-100 disabled:opacity-40 cursor-pointer"
         >
           <Delete className="w-3.5 h-3.5" />
           <span>BACKSPACE</span>
@@ -339,7 +339,7 @@ export const RotaryDialerStep: React.FC<RotaryDialerStepProps> = ({ onComplete, 
               setDigits(['5', '5', '5', '0', '1', '9', '9']);
               onDogeshReaction("Dogesh pity dialer activated.", 'talk');
             }}
-            className="text-xs underline font-bold text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white"
+            className="text-xs underline font-bold text-neutral-800 hover:text-black cursor-pointer"
           >
             🐕 Dogesh Pity: Auto-fill fake rotary number
           </button>

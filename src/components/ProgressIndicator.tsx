@@ -23,7 +23,7 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({ currentRou
                 ? 'bg-[var(--green)]'
                 : i + 1 === currentIndex
                 ? 'bg-[var(--yellow)] scale-110'
-                : 'bg-neutral-300 dark:bg-neutral-700'
+                : 'bg-neutral-200'
             }`}
           />
         ))}

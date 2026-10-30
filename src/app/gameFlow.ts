@@ -2,25 +2,23 @@ export type RoundId =
   | "trolley"
   | "hangman"
   | "maze"
-  | "quiz"
   | "riddles";
 
-export type ScreenId = "login" | RoundId | "captcha" | "result";
+export type ScreenId = "intro" | "login" | RoundId | "captcha" | "result";
 
 export const SCORED_ROUND_IDS: RoundId[] = [
   "trolley",
   "hangman",
   "maze",
-  "quiz",
   "riddles"
 ];
 
 export const FLOW_ORDER: ScreenId[] = [
+  "intro",
   "login",
   "trolley",
   "hangman",
   "maze",
-  "quiz",
   "riddles",
   "captcha",
   "result"
@@ -41,3 +39,4 @@ export function getNextScreen(current: ScreenId): ScreenId {
 export function isScoredRound(screen: ScreenId): screen is RoundId {
   return SCORED_ROUND_IDS.includes(screen as RoundId);
 }
+

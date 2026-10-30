@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "./theme.css";
 
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 @layer base {
   * {
     box-sizing: border-box;
@@ -170,4 +172,70 @@
 ::-webkit-scrollbar-thumb {
   background: var(--ink);
   border: 2px solid var(--paper);
+}
+
+/* Contrast & Selection Safeguards */
+.scene-dark-panel {
+  background-color: #171717;
+  color: #F5F5F5;
+  border-color: #000000;
+}
+
+.scene-dark-panel text,
+.scene-dark-panel p,
+.scene-dark-panel span,
+.scene-dark-panel div {
+  color: #F5F5F5;
+}
+
+/* Prevent accidental blue selection dragging on game boards while keeping text selectable in inputs */
+.game-surface,
+.game-scene,
+.interactive-board {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+input, textarea, [contenteditable="true"] {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+}
+
+/* Subtle animations */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-5px); }
+  40%, 80% { transform: translateX(5px); }
+}
+
+.animate-shake {
+  animation: shake 0.4s ease-in-out;
+}
+
+@keyframes bounce-subtle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.animate-bounce-subtle {
+  animation: bounce-subtle 2s infinite ease-in-out;
+}
+
+@keyframes hangman-swing {
+  0% { transform: rotate(-2.5deg); }
+  100% { transform: rotate(2.5deg); }
+}
+
+.animate-hangman-swing {
+  transform-origin: 360px 52px;
+  animation: hangman-swing 2.8s ease-in-out infinite alternate;
+}
+
+@keyframes captive-run {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(260px); }
+}
+
+.animate-captive-run {
+  animation: captive-run 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }

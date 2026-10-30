@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { NeoButton } from '../../components/NeoButton';
 import { getRandomNickname } from '../../data/insultNicknames';
 
@@ -11,6 +11,7 @@ export const NameStep: React.FC<NameStepProps> = ({ onComplete, onDogeshReaction
   const [typedName, setTypedName] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [assignedNickname, setAssignedNickname] = useState<string | null>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,34 +29,52 @@ export const NameStep: React.FC<NameStepProps> = ({ onComplete, onDogeshReaction
     setAssignedNickname(nickname);
     onDogeshReaction("I've renamed you. You're welcome.", 'laugh');
 
-    // Remain visible for 2.8 seconds before advancing automatically
-    setTimeout(() => {
+    // Auto-advance after 3 seconds or player can click Continue
+    timerRef.current = setTimeout(() => {
       onComplete(nickname);
-    }, 2800);
+    }, 3000);
   };
+
+  const handleContinueImmediately = () => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    if (assignedNickname) {
+      onComplete(assignedNickname);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
 
   return (
     <div className="space-y-6 py-2">
       {assignedNickname ? (
-        /* Full-Focus Large Reveal State */
-        <div className="p-8 md:p-12 bg-[var(--yellow)] text-black border-4 border-black shadow-[8px_8px_0px_#000] rounded-2xl text-center space-y-4 animate-scale-in">
+        /* Full-Focus Large Reveal State: YOUR NAME IS: [NAME] */
+        <div className="p-8 md:p-12 bg-[var(--yellow)] text-black border-4 border-black shadow-[8px_8px_0px_#000] rounded-2xl text-center space-y-5 animate-scale-in">
           <div className="font-heading text-lg md:text-2xl uppercase tracking-widest text-neutral-800">
-            YOUR NAME IS…
+            YOUR NAME IS:
           </div>
-          <div className="text-3xl md:text-5xl lg:text-6xl font-heading text-black tracking-tight leading-tight uppercase">
+          <div className="text-3xl md:text-5xl lg:text-6xl font-heading text-black tracking-tight leading-tight uppercase underline decoration-4 decoration-black">
             {assignedNickname}
           </div>
           <p className="text-sm md:text-base font-bold text-neutral-800 italic pt-2">
-            "That name was too functional. Fixed it."
+            "Your previous name was too functional. Fixed it."
           </p>
+          <div className="pt-3 max-w-xs mx-auto">
+            <NeoButton variant="white" fullWidth size="md" onClick={handleContinueImmediately}>
+              CONTINUE →
+            </NeoButton>
+          </div>
         </div>
       ) : (
         <>
           <div className="text-center">
-            <h2 className="font-heading text-2xl md:text-3xl text-[var(--ink)] mb-2">
+            <h2 className="font-heading text-2xl md:text-3xl text-black mb-2">
               STEP 1: IDENTIFY YOURSELF
             </h2>
-            <p className="text-base text-neutral-700 dark:text-neutral-300">
+            <p className="text-base text-neutral-900 font-semibold">
               Enter your name, future genius.
             </p>
           </div>

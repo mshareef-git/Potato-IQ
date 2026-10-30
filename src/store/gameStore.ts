@@ -57,13 +57,13 @@ const initialRoundResults: Record<RoundId, RoundResult> = {
   trolley: { id: "trolley", status: "not-started", attempts: 0, wrongAnswers: 0, usedHint: false },
   hangman: { id: "hangman", status: "not-started", attempts: 0, wrongAnswers: 0, usedHint: false },
   maze: { id: "maze", status: "not-started", attempts: 0, wrongAnswers: 0, usedHint: false },
-  quiz: { id: "quiz", status: "not-started", attempts: 0, wrongAnswers: 0, usedHint: false },
   riddles: { id: "riddles", status: "not-started", attempts: 0, wrongAnswers: 0, usedHint: false },
 };
 
 export const useGameStore = create<GameState>((set, get) => ({
-  screen: "login",
+  screen: "intro",
   theme: "light",
+
   profile: null,
   roundResults: { ...initialRoundResults },
   currentRoundId: null,
@@ -204,8 +204,9 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   resetGame: () => {
     set({
-      screen: "login",
+      screen: "intro",
       theme: "light",
+
       profile: null,
       roundResults: { ...initialRoundResults },
       currentRoundId: null,

@@ -66,7 +66,7 @@ export const DateDropdown: React.FC<DateDropdownProps> = ({ value, onChange }) =
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="neo-input flex items-center justify-between text-left font-heading text-base md:text-lg cursor-pointer bg-white dark:bg-neutral-800 text-[var(--ink)]"
+        className="neo-input flex items-center justify-between text-left font-heading text-base md:text-lg cursor-pointer bg-white text-black border-3 border-black"
         aria-haspopup="listbox"
         aria-expanded={isOpen}
       >
@@ -80,7 +80,7 @@ export const DateDropdown: React.FC<DateDropdownProps> = ({ value, onChange }) =
           ref={listRef}
           role="listbox"
           tabIndex={-1}
-          className="absolute z-50 mt-1 w-full max-h-60 overflow-y-auto bg-white dark:bg-neutral-800 border-3 border-black rounded-xl shadow-[6px_6px_0px_#000] p-1.5 focus:outline-none"
+          className="absolute z-50 mt-1 w-full max-h-60 overflow-y-auto bg-white border-3 border-black rounded-xl shadow-[6px_6px_0px_#000] p-1.5 focus:outline-none"
         >
           {ALL_CALENDAR_DATES.map((dateStr) => {
             const isSelected = dateStr === value;
@@ -97,7 +97,7 @@ export const DateDropdown: React.FC<DateDropdownProps> = ({ value, onChange }) =
                 className={`px-3 py-2 text-sm font-heading rounded-lg cursor-pointer flex items-center justify-between transition-colors ${
                   isSelected
                     ? 'bg-[var(--yellow)] text-black'
-                    : 'text-[var(--ink)] hover:bg-neutral-100 dark:hover:bg-neutral-700'
+                    : 'text-black hover:bg-neutral-100'
                 }`}
               >
                 <span className={isDec31 ? 'underline decoration-2 underline-offset-4 decoration-neutral-500' : ''}>

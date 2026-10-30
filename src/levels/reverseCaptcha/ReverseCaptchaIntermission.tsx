@@ -80,11 +80,11 @@ export const ReverseCaptchaIntermission: React.FC<ReverseCaptchaIntermissionProp
           <span>INTERMISSION: REVERSE CAPTCHA</span>
         </div>
 
-        <h2 className="font-heading text-2xl md:text-3xl text-[var(--ink)] mb-2 uppercase">
+        <h2 className="font-heading text-2xl md:text-3xl text-black mb-2 uppercase">
           PROVE YOU ARE A ROBOT
         </h2>
 
-        <p className="text-sm md:text-base text-neutral-800 dark:text-neutral-200 font-semibold mb-4">
+        <p className="text-sm md:text-base text-neutral-900 font-bold mb-4">
           Complete this task at a speed no human should manage (under 5 seconds).
         </p>
 
@@ -93,12 +93,12 @@ export const ReverseCaptchaIntermission: React.FC<ReverseCaptchaIntermissionProp
             <TimerBar currentSeconds={secondsLeft} totalSeconds={5} label="ROBOT REACTION TIMER (5s)" />
 
             {/* Target 160-char string */}
-            <div className="relative p-3.5 bg-neutral-100 dark:bg-neutral-900 border-3 border-black rounded-xl font-mono text-xs break-all leading-tight text-neutral-800 dark:text-neutral-200 select-all">
+            <div className="relative p-3.5 bg-neutral-100 border-3 border-black rounded-xl font-mono text-xs break-all leading-tight text-neutral-900 font-bold select-all">
               {targetString}
               <button
                 type="button"
                 onClick={handleCopy}
-                className="absolute right-2 top-2 p-1.5 bg-white dark:bg-neutral-800 border-2 border-black rounded shadow-[2px_2px_0px_#000] hover:bg-yellow-200 text-xs font-heading flex items-center gap-1"
+                className="absolute right-2 top-2 p-1.5 bg-white border-2 border-black rounded shadow-[2px_2px_0px_#000] hover:bg-yellow-200 text-xs font-heading flex items-center gap-1 cursor-pointer"
                 title="Copy to clipboard"
               >
                 {isCopied ? <Check className="w-3.5 h-3.5 text-green-600" /> : <Copy className="w-3.5 h-3.5" />}
@@ -113,7 +113,7 @@ export const ReverseCaptchaIntermission: React.FC<ReverseCaptchaIntermissionProp
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
                 placeholder="Paste the string instantly..."
-                className="neo-input font-mono text-xs py-3"
+                className="neo-input font-mono text-xs py-3 bg-white text-black"
               />
 
               <NeoButton type="submit" variant="yellow" fullWidth size="lg">
@@ -124,11 +124,11 @@ export const ReverseCaptchaIntermission: React.FC<ReverseCaptchaIntermissionProp
         )}
 
         {outcome === 'success' && (
-          <div className="p-5 bg-green-100 dark:bg-green-950/70 border-4 border-black rounded-xl max-w-md mx-auto space-y-3 animate-slide-down">
-            <div className="font-heading text-xl text-green-800 dark:text-green-300">
+          <div className="p-5 bg-green-100 border-4 border-black rounded-xl max-w-md mx-auto space-y-3 animate-slide-down">
+            <div className="font-heading text-xl text-green-900">
               🤖 ROBOT IDENTITY VERIFIED!
             </div>
-            <p className="text-sm text-neutral-800 dark:text-neutral-200 font-bold">
+            <p className="text-sm text-neutral-900 font-bold">
               Sub-5-second execution detected. Dogesh acknowledges your synthetic superiority.
             </p>
             <div className="pt-2">
@@ -141,18 +141,18 @@ export const ReverseCaptchaIntermission: React.FC<ReverseCaptchaIntermissionProp
         )}
 
         {outcome === 'failed' && (
-          <div className="p-5 bg-red-100 dark:bg-red-950/70 border-4 border-black rounded-xl max-w-md mx-auto space-y-3 animate-slide-down">
-            <div className="font-heading text-xl text-red-700 dark:text-red-300">
+          <div className="p-5 bg-red-100 border-4 border-black rounded-xl max-w-md mx-auto space-y-3 animate-slide-down">
+            <div className="font-heading text-xl text-red-800">
               ⛔ HUMAN DETECTED (TOO SLOW!)
             </div>
-            <p className="text-sm text-neutral-800 dark:text-neutral-200 font-bold">
+            <p className="text-sm text-neutral-900 font-bold">
               You failed to paste and submit in under 5 seconds. Classic human latency.
             </p>
             <div className="flex gap-2 justify-center pt-2">
               <button
                 type="button"
                 onClick={handleTryAgain}
-                className="px-4 py-2 text-xs font-heading border-2 border-black rounded-lg bg-white dark:bg-neutral-800 text-[var(--ink)] shadow-[2px_2px_0px_#000] hover:bg-neutral-200 inline-flex items-center gap-1.5"
+                className="px-4 py-2 text-xs font-heading border-2 border-black rounded-lg bg-white text-black shadow-[2px_2px_0px_#000] hover:bg-neutral-200 inline-flex items-center gap-1.5 cursor-pointer"
               >
                 <RotateCcw className="w-4 h-4" />
                 <span>TRY AGAIN</span>
