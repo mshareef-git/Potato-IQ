@@ -316,7 +316,7 @@ export const RiddlesSection: React.FC<RiddlesSectionProps> = ({ onDogeshReaction
                 </p>
                 <div className="pt-2">
                   <NeoButton variant="green" size="lg" onClick={() => goNext()}>
-                    <span>CONTINUE TO REVERSE CAPTCHA</span>
+                    <span>CONTINUE TO WEBCAM RECOVERY</span>
                     <ArrowRight className="w-5 h-5 ml-1.5 inline" />
                   </NeoButton>
                 </div>

@@ -6,7 +6,7 @@ import { TrolleyLevel } from '../levels/trolley/TrolleyLevel';
 import { ReverseHangmanLevel } from '../levels/hangman/ReverseHangmanLevel';
 import { MazeLevel } from '../levels/maze/MazeLevel';
 import { RiddlesSection } from '../levels/riddles/RiddlesSection';
-import { ReverseCaptchaIntermission } from '../levels/reverseCaptcha/ReverseCaptchaIntermission';
+import { WebcamRecovery } from '../levels/WebcamRecovery/WebcamRecovery';
 import { Certificate } from '../components/Certificate';
 
 export interface LevelComponentProps {
@@ -20,6 +20,6 @@ export const LEVEL_REGISTRY: Record<ScreenId, React.ComponentType<LevelComponent
   hangman: ReverseHangmanLevel,
   maze: MazeLevel,
   riddles: RiddlesSection,
-  captcha: ReverseCaptchaIntermission,
+  captcha: WebcamRecovery,
   result: Certificate as unknown as React.ComponentType<LevelComponentProps>
 };
